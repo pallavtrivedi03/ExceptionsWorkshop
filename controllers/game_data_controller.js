@@ -2,6 +2,7 @@
 
   var mongoose = require('mongoose');
   var TeamInfo = mongoose.model('TeamInfo');
+  var PlayerInfo = mongoose.model('PlayerInfo');
   var GameSchedule = mongoose.model('GameSchedule');
 
   exports.processRequest = function(req, res) {
@@ -18,6 +19,11 @@ console.log("Request received");
    {
     console.log("Squad Request received");
     getTeamSquad(req,res);
+   }
+   else if (req.body.result.action == "player.info")
+   {
+    console.log("Player info received");
+    getPlayerInfo(req,res);
    }
  };
 
@@ -50,6 +56,46 @@ console.log("Request received");
             return res.json({
                   speech: 'Currently I am not having information about this team',
                   displayText: 'Currently I am not having information about this team',
+                  source: 'team info'
+              });
+          }
+        });
+  }
+
+  function getPlayerInfo(req,res)
+  {
+      // const player = new PlayerInfo({name:"David De Gea",position:"Goalkeeper",nationality:"Spain",appearances:"262",clean_sheets:"97",goals:"0",wins:"150",loses:"52",still_plays:"1"});
+      // player.save();
+
+      let playerToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.player ? req.body.result.parameters.player : 'Unknown';
+    console.log("Player name is "+playerToSearch);
+    
+    
+
+    PlayerInfo.findOne({name:playerToSearch},function(err,playerExists)
+        {
+          if (err)
+          {
+            return res.json({
+                speech: 'Sorry, I am not having information about this player.',
+                displayText: 'Sorry, I am not having information about this player.',
+                source: 'team info'
+            });
+          }
+  
+          if (playerExists)
+          {
+            return res.json({
+                  speech: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality,
+                  displayText: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality,
+                  source: 'player info'
+              });
+          }
+          else {
+            console.log('player name is '+playerExists);
+            return res.json({
+                  speech: 'Currently I am not having information about this player',
+                  displayText: 'Currently I am not having information about this player',
                   source: 'team info'
               });
           }

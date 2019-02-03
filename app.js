@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var config = require('./config/config');
 var GameSchedule = require('./models/GameSchedule');
 var TeamInfo = require('./models/TeamInfo');
+var PlayerInfo = require('./models/PlayerInfo');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
