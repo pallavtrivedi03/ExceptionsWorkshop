@@ -5,6 +5,7 @@
   var GameSchedule = mongoose.model('GameSchedule');
 
   exports.processRequest = function(req, res) {
+console.log("Request received");
 
     if (req.body.result.action == "schedule") {
      getTeamSchedule(req,res)
@@ -15,7 +16,8 @@
    }
    else if (req.body.result.action == "team.squad")
    {
-    getTeamSquad(req,res)
+    console.log("Squad Request received");
+    getTeamSquad(req,res);
    }
  };
 
@@ -56,9 +58,8 @@
 
   function getTeamSquad(req,res)
   {
-  
       let teamToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.team ? req.body.result.parameters.team : 'Unknown';
-
+      console.log("team to search is "+teamToSearch);
     TeamInfo.findOne({name:teamToSearch},function(err,teamExists)
         {
           if (err)
@@ -72,6 +73,7 @@
   
           if (teamExists)
           {
+            console.log("Team found "+teamExists);
             return res.json({
                   speech: teamExists.squad,
                   displayText: teamExists.squad,
