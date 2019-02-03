@@ -86,8 +86,8 @@ console.log("Request received");
           if (playerExists)
           {
             return res.json({
-                  speech: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality,
-                  displayText: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality,
+                  speech: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality+"\nAppearances: "+playerExists.appearances+"\nClean Sheets: "+playerExists.clean_sheets+"\nGoals: "+playerExists.goals+"\nWins: "+playerExists.wins+"\nLoses: "+playerExists.loses,
+                  displayText: "Name: "+playerExists.name+"\nPosition: "+playerExists.position+"\nNationality: "+playerExists.nationality+"\nAppearances: "+playerExists.appearances+"\nClean Sheets: "+playerExists.clean_sheets+"\nGoals: "+playerExists.goals+"\nWins: "+playerExists.wins+"\nLoses: "+playerExists.loses,
                   source: 'player info'
               });
           }
