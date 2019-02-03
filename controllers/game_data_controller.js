@@ -65,8 +65,8 @@ console.log("Request received");
           if (err)
           {
             return res.json({
-                speech: 'Sorry, I am not having information about squad of this club.',
-                displayText: 'Sorry, I am not having information about squad of this club.',
+                speech: 'Sorry, I am not having information about this club.',
+                displayText: 'Sorry, I am not having information about this club.',
                 source: 'team info'
             });
           }
@@ -75,17 +75,17 @@ console.log("Request received");
           {
             console.log("Team found "+teamExists);
             return res.json({
-                  speech: teamExists.squad,
-                  displayText: teamExists.squad,
+                  speech: (teamExists.squad == "" ? "Sorry, I don't have information about squad of this club." : teamExists.squad),
+                  displayText: (teamExists.squad == "" ? "Sorry, I don't have information about squad of this club." : teamExists.squad),
                   source: 'team info'
               });
           }
           else {
             console.log('team name is '+teamToSearch);
             return res.json({
-              speech: 'Sorry, I am not having information about squad of this club.',
-              displayText: 'Sorry, I am not having information about squad of this club.',
-              source: 'team info'
+              speech: 'Sorry, I am not having information about this club.',
+                displayText: 'Sorry, I am not having information about this club.',
+                source: 'team info'
               });
           }
         });
