@@ -9,50 +9,28 @@
     if (req.body.result.action == "schedule") {
      getTeamSchedule(req,res)
    }
-   else if (req.body.result.action == "tell.about")
+   else if (req.body.result.action == "team.info")
    {
-       getTeamStats(req,res)
+    getTeamInfo(req,res)
+   }
+   else if (req.body.result.action == "team.squad")
+   {
+    getTeamSquad(req,res)
    }
  };
 
-  function getTeamStats(req,res)
+  function getTeamInfo(req,res)
   {
   
       let teamToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.team ? req.body.result.parameters.team : 'Unknown';
-  
-      /*let kings = new TeamInfo();
-      kings.name = "Sacramento Kings";
-      kings.description = "The Sacramento Kings are an American professional basketball team based in Sacramento, California. The Kings compete in the National Basketball Association as a member of the Western Conference Pacific Division.";
-      kings.save(function(err,billSaved)
-        {
-            if(err)	return err;
-        });*/
-  
-    // TeamInfo.find(function(err,res){
-    //     if(!err) {
-    //         console.log("number of docs are "+res.length);
-    //     } else {
-    //         console.log(err);
-    //     }
-    // })  
-    
-    // var myTeam = new TeamInfo({name:"Manchester United",description:"Manchester United Football Club, commonly known as Man United, or simply United, is a professional football club based in Old Trafford, Greater Manchester, England, that competes in the Premier League, the top flight of English football."});
-    // myTeam.save()
-    //     .then(item => {
-    //         res.send("item saved to database");
-    //     })
-    //     .catch(err => {
-    //         res.status(400).send("unable to save to database");
-    //     });
-
 
     TeamInfo.findOne({name:teamToSearch},function(err,teamExists)
         {
           if (err)
           {
             return res.json({
-                speech: 'Something went wrong!',
-                displayText: 'Something went wrong!',
+                speech: 'Sorry, I am not having information about this club.',
+                displayText: 'Sorry, I am not having information about this club.',
                 source: 'team info'
             });
           }
@@ -75,20 +53,44 @@
           }
         });
   }
+
+  function getTeamSquad(req,res)
+  {
+  
+      let teamToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.team ? req.body.result.parameters.team : 'Unknown';
+
+    TeamInfo.findOne({name:teamToSearch},function(err,teamExists)
+        {
+          if (err)
+          {
+            return res.json({
+                speech: 'Sorry, I am not having information about squad of this club.',
+                displayText: 'Sorry, I am not having information about squad of this club.',
+                source: 'team info'
+            });
+          }
+  
+          if (teamExists)
+          {
+            return res.json({
+                  speech: teamExists.squad,
+                  displayText: teamExists.squad,
+                  source: 'team info'
+              });
+          }
+          else {
+            console.log('team name is '+teamToSearch);
+            return res.json({
+              speech: 'Sorry, I am not having information about squad of this club.',
+              displayText: 'Sorry, I am not having information about squad of this club.',
+              source: 'team info'
+              });
+          }
+        });
+  }
   
   function getTeamSchedule(req,res)
   {
-    // let gameSchedule = new GameSchedule();
-    // gameSchedule.date = "Feb 11 2018";
-    // gameSchedule.opponent = "Minnesota";
-    // gameSchedule.hasBeenPlayed = true;
-    // gameSchedule.isWinner = false;
-    // gameSchedule.score = "111-106";
-    // gameSchedule.save(function(err,billSaved)
-    // {
-    //   if(err)	return err;
-    // });
-  
     let parameters = req.body.result.parameters;
     if (parameters.team1 == "")
     {
