@@ -1,8 +1,36 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
-a {
-  color: #00B7FF;
-}
+html,body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    min-height: 100%;
+    width: 100%;
+    margin: 0px;
+    background:linear-gradient(0deg,rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url("../images/arena.jpg");
+    background-size: cover;
+  }
+  
+  a {
+    color: #00B7FF;
+  }
+
+  .logo_img {
+      height:100%;
+      width: 50%;
+      margin: 0 auto;
+  }
+  /* section.header_section {
+    background: url("../images/man_utd_arena.jpg") no-repeat fixed 0 0 / cover ;
+    padding: 0;
+    position: relative;
+    height: 100%;
+    margin: 0px;
+  }
+  section.top_banner_bg:after {
+      position: relative;;
+      top:0px;
+      left:0px;
+      right:0px;
+      height:100%;
+      width:100%;
+      content:"";
+  } */

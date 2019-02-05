@@ -8,7 +8,7 @@
   exports.processRequest = function(req, res) {
 console.log("Request received");
 
-    if (req.body.result.action == "schedule") {
+    if (req.body.result.action == "team.schedule") {
      getTeamSchedule(req,res)
    }
    else if (req.body.result.action == "team.info")
@@ -139,11 +139,25 @@ console.log("Request received");
   
   function getTeamSchedule(req,res)
   {
+    // var gameObject = new GameSchedule({
+    //   date:Date.now(),
+    //   opponent:"Juventus",
+    //   hasBeenPlayed:true,
+    //   isWinner:true,
+    //   score:"3-4"
+    // });
+    // gameObject.save();
+
+    // console.log("Object saved");
+    // return;
+
     let parameters = req.body.result.parameters;
     if (parameters.team1 == "")
     {
       let game_occurence = parameters.game_occurence;
       let team = parameters.team;
+      console.log("team is "+team);
+      
       if (game_occurence == "previous")
       {
         //previous game
@@ -157,68 +171,150 @@ console.log("Request received");
                 source: 'game schedule'
             });
           }
-          if (games)
+          if (games.length > 0)
           {
+            console.log("Length is "+games.length);
+            
             var requiredGame;
+            var isFound = false;
+            var foundAtIndex = -1;
+            var timeDifference = 9999999999;
             for (var i=0; i < games.length; i++)
             {
                 var game = games[i];
-  
                 var convertedCurrentDate = new Date();
                 var convertedGameDate = new Date(game.date);
                 console.log('converted game date is -------> '+convertedGameDate);
                 console.log('converted current date is -------> '+convertedCurrentDate);
   
-                if (convertedGameDate > convertedCurrentDate)
-                {
-                  if(games.length > 1)
-                  {
-                    requiredGame = games[i-1];
-  
-                    var winningStatement = "";
-                    if (requiredGame.isWinner)
-                    {
-                        winningStatement = "Kings won this match by "+requiredGame.score;
-                    }
-                    else {
-                      winningStatement = "Kings lost this match by "+requiredGame.score;
-                    }
-                    return res.json({
-                        speech: 'Last game between Kings and '+parameters.team+' was played on '+requiredGame.date+' .'+winningStatement,
-                        displayText: 'Last game between Kings and '+parameters.team+' was played on '+requiredGame.date+' .'+winningStatement,
-                        source: 'game schedule'
-                    });
-                    break;
-                  }
-                  else {
-                    return res.json({
-                        speech: 'Cant find any previous game played between Kings and '+parameters.team,
-                        displayText: 'Cant find any previous game played between Kings and '+parameters.team,
-                        source: 'game schedule'
-                    });
+                if(convertedGameDate < convertedCurrentDate){
+                  isFound = true;
+                  console.log("difference is "+(convertedCurrentDate - convertedGameDate));
+                  
+                  //now find the immediate
+                  if((convertedCurrentDate - convertedGameDate) < timeDifference){
+                    timeDifference = (convertedCurrentDate - convertedGameDate);
+                    foundAtIndex = i;
                   }
                 }
-            }
-  
-  
-  
+              }
+                if(!isFound){
+                  return res.json({
+                            speech: 'Cant find any previous game played between Manchester United and '+parameters.team,
+                            displayText: 'Cant find any previous game played between Manchester United and '+parameters.team,
+                            source: 'game schedule'
+                        });
+                } else {
+                  console.log("index is "+foundAtIndex);
+                  
+                  requiredGame = games[foundAtIndex];
+                  console.log("Required game is "+requiredGame);
+                  
+                      var winningStatement = "";
+                    if (requiredGame.isWinner)
+                    {
+                        winningStatement = "Manchester won this match by "+requiredGame.score;
+                    }
+                    else {
+                      winningStatement = "Manchester lost this match by "+requiredGame.score;
+                    }
+                    return res.json({
+                        speech: 'Last game between Manchester and '+parameters.team+' was played on '+requiredGame.date.toShortFormat()+' .'+winningStatement,
+                        displayText: 'Last game between Manchester and '+parameters.team+' was played on '+requiredGame.date.toShortFormat()+' .'+winningStatement,
+                        source: 'game schedule'
+                    });
+                } 
           }
   
         });
       }
       else {
-        return res.json({
-            speech: 'Next game schedules will be available soon',
-            displayText: 'Next game schedules will be available soon',
-            source: 'game schedule'
+        //next game
+        console.log("Next game search");
+        
+        GameSchedule.find({opponent:team},function(err,games)
+        {
+          if (err)
+          {
+            return res.json({
+                speech: 'Something went wrong!',
+                displayText: 'Something went wrong!',
+                source: 'game schedule'
+            });
+          }
+          if (games.length > 0)
+          {
+            console.log("Length is "+games.length);
+            console.log(games);
+            
+            var requiredGame;
+            var isFound = false;
+            var foundAtIndex = -1;
+            var timeDifference = 0;
+                
+            for (var i=0; i < games.length; i++)
+            {
+                var game = games[i];
+                var convertedCurrentDate = new Date();
+                var convertedGameDate = new Date(game.date);
+                console.log('converted game date is -------> '+convertedGameDate);
+                console.log('converted current date is -------> '+convertedCurrentDate);
+  
+                if(convertedGameDate > convertedCurrentDate){
+                  isFound = true;
+                  console.log("difference is "+(convertedGameDate - convertedCurrentDate));
+                  
+                  //now find the immediate
+                  if((convertedGameDate - convertedCurrentDate) > timeDifference){
+                    timeDifference = (convertedGameDate - convertedCurrentDate);
+                    foundAtIndex = i;
+                  }
+                }
+              }
+                if(!isFound){
+                  return res.json({
+                            speech: 'Cant find any upcoming game between Manchester United and '+parameters.team,
+                            displayText: 'Cant find any upcoming game between Manchester United and '+parameters.team,
+                            source: 'game schedule'
+                        });
+                } else {
+                  console.log("index is "+foundAtIndex);
+                  
+                  requiredGame = games[foundAtIndex];
+                  console.log("Required game is "+requiredGame);
+                  
+                      var winningStatement = "Next game between Manchester and "+parameters.team+" will be played on "+requiredGame.date.toShortFormat();
+                    
+                    return res.json({
+                        speech: winningStatement,
+                        displayText: winningStatement,
+                        source: 'game schedule'
+                    });
+                }
+          }
+  
         });
       }
     }
     else {
       return res.json({
-          speech: 'Cant handle the queries with two teams now. I will update myself',
-          displayText: 'Cant handle the queries with two teams now. I will update myself',
+          speech: 'Cant handle the queries with two teams now. I will update myself soon.',
+          displayText: 'Cant handle the queries with two teams now. I will update myself soon.',
           source: 'game schedule'
       });
     }
   }
+
+  Date.prototype.toShortFormat = function() {
+
+    var month_names =["Jan","Feb","Mar",
+                      "Apr","May","Jun",
+                      "Jul","Aug","Sep",
+                      "Oct","Nov","Dec"];
+    
+    var day = this.getDate();
+    var month_index = this.getMonth();
+    var year = this.getFullYear();
+    
+    return "" + day + "-" + month_names[month_index] + "-" + year;
+}

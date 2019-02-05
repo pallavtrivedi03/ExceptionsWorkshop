@@ -12,7 +12,7 @@ var PlayerInfo = require('./models/PlayerInfo');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  `mongodb+srv://admin:rco4IHpTrsC7g1Qe@cluster0-vyric.mongodb.net/fifapedia?retryWrites=true`).then(() => {
+  "mongodb+srv://"+config.mongo_user+":"+config.mongo_password+"@cluster0-vyric.mongodb.net/"+config.mongo_database+"?retryWrites=true").then(() => {
     console.log("Connected with mongo");
     
     }).catch(err => {

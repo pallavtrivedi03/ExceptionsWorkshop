@@ -1,5 +1,5 @@
 module.exports = {
     mongo_user: "admin",
     mongo_password: "rco4IHpTrsC7g1Qe",
-    mongo_schema: "fifapedia"
+    mongo_database: "fifapedia"
 }
