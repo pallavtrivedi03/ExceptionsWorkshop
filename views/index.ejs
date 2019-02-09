@@ -3,11 +3,8 @@
   <head>
     <title><%= title %></title>
     <script src="scripts/jquery.min.js"></script>
-	  <script src="scripts/bootstrap.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="stylesheets/animate.min.css">
-    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 
     <script type="text/javascript">
       /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
@@ -21,23 +18,25 @@
   </script>
   </head>
   <body>
-      <br/><div class="row">
-          <div class="col-md-5">
-          </div>
-          <div class="col-md-2">
-              <div class="logo_img">
-                  <a href="#"><img src="images/man_utd_logo.png" alt="logoimage" width="120px;" height="120px;"></a>
-              </div>
-          </div>
-          
-          <div class="col-md-5">
-          </div>
+      <center>
+      <br/>
+      <div class="header">
+      
+        <a href="#"><img src="images/man_utd_logo.png" alt="logoimage" width="120px;" height="120px;"></a>
+        <h1 style="color:white; font-weight: 500; font-family: 'Roboto Condensed', sans-serif; font-size: 36px;">GLORY GLORY MAN UNITED!!!</h1>
+      
     </div>
 
-    <div>
-      <center>
-          <h1 style="color:white"><b><i>MANCHESTER UNITED</i></b></h1>
-      </center>
+    <div class="messageBlock">
+      
+      <p>Please download these files</p>
+      <ul>
+        <li><a href='/documenthandler/downloadPrerequisites'>Requirements</a> (required Tools/IDEs/Packages/Dependencies etc)</li>
+        <li><a href='/documenthandler/downloadCollectionsData'>Collections Data</a> (json data for MonogDB collections)</li>
+        <li><a href='/documenthandler/assets'>Assets</a> (images to be used for client)</li>
+        <!-- <li>Study Material (on Dialogflow/Webhooks/Git etc)</li> -->
+      </ul>
     </div>
+</center>
   </body>
 </html>

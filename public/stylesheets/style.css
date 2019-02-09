@@ -18,19 +18,28 @@ html,body {
       width: 50%;
       margin: 0 auto;
   }
-  /* section.header_section {
-    background: url("../images/man_utd_arena.jpg") no-repeat fixed 0 0 / cover ;
-    padding: 0;
-    position: relative;
-    height: 100%;
-    margin: 0px;
+
+  .header {
+    margin-top:20px;
   }
-  section.top_banner_bg:after {
-      position: relative;;
-      top:0px;
-      left:0px;
-      right:0px;
-      height:100%;
-      width:100%;
-      content:"";
-  } */
+  .messageBlock {
+    margin-top:52px;
+    padding-bottom: 20px;
+    width: 50%;
+    background-color:rgba(0,0,0,0.5);
+    border-radius: 20px;
+    color:white;
+    text-align: left;
+  }
+
+  .messageBlock p {
+    font-size: 22px;
+    margin-left: 22px;
+    padding-top: 22px;
+  }
+
+  .messageBlock li {
+    font-size: 18px;
+    margin-left: 22px;
+    padding: 6px;
+  }

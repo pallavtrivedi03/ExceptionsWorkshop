@@ -1,15 +1,15 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var mongoose = require('mongoose');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
 
-var config = require('./config/config');
-var GameSchedule = require('./models/GameSchedule');
-var TeamInfo = require('./models/TeamInfo');
-var PlayerInfo = require('./models/PlayerInfo');
-var Event = require('./models/Event');
+const config = require('./config/config');
+const GameSchedule = require('./models/GameSchedule');
+const TeamInfo = require('./models/TeamInfo');
+const PlayerInfo = require('./models/PlayerInfo');
+const Event = require('./models/Event');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
@@ -20,9 +20,11 @@ mongoose.connect(
     console.log("Error while connecting db "+err);
     });
 
-var indexRouter = require('./routes/index');
-var dialogflowRouter = require('./routes/dialogflow');
-var app = express();
+const indexRouter = require('./routes/index');
+const dialogflowRouter = require('./routes/dialogflow');
+const downloadRouter = require('./routes/documenthandler');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/dialogflow', dialogflowRouter);
+app.use('/documenthandler', downloadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
