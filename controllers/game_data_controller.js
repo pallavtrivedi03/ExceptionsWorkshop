@@ -4,6 +4,7 @@
   var TeamInfo = mongoose.model('TeamInfo');
   var PlayerInfo = mongoose.model('PlayerInfo');
   var GameSchedule = mongoose.model('GameSchedule');
+  var Event = mongoose.model('Event');
 
   exports.processRequest = function(req, res) {
 console.log("Request received");
@@ -24,6 +25,11 @@ console.log("Request received");
    {
     console.log("Player info received");
     getPlayerInfo(req,res);
+   }
+   else if (req.body.result.action == "event.info")
+   {
+    console.log("Event info received");
+    getEventInfo(req,res);
    }
  };
 
@@ -303,6 +309,47 @@ console.log("Request received");
           source: 'game schedule'
       });
     }
+  }
+
+  function getEventInfo(req,res)
+  {
+      // const event = new Event(
+      //   {name:"Munich Air Disaster",
+      //   description:"On February 6, 1958, a plane carrying a Manchester United team led by legendary manager Sir Matt Busby swerved off the Munich runway and crashed into a house causing an explosion. At least 23 people died in the crash, including eight players from that squad. Sixty-one years later, the people of Manchester still observe a moment of silence at 15.04 on this fateful day to remember their fallen heroes."});
+      // console.log("Event created");
+      
+      //   event.save();
+      //   console.log("Event saved");
+      let eventToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.event ? req.body.result.parameters.event : 'Unknown';
+    console.log("Event name is "+eventToSearch);
+    Event.findOne({name:eventToSearch},function(err,eventExists)
+        {
+          if (err)
+          {
+            return res.json({
+                speech: 'Sorry, I am not having information about this event.',
+                displayText: 'Sorry, I am not having information about this event.',
+                source: 'event info'
+            });
+          }
+  
+          if (eventExists)
+          {
+            return res.json({
+                  speech: eventExists.description,
+                  displayText: eventExists.description,
+                  source: 'event info'
+              });
+          }
+          else {
+            console.log('event name is '+eventExists);
+            return res.json({
+                  speech: 'Currently I am not having information about this event',
+                  displayText: 'Currently I am not having information about this event',
+                  source: 'evnet info'
+              });
+          }
+        });
   }
 
   Date.prototype.toShortFormat = function() {
